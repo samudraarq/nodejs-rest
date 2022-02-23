@@ -1,7 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const feedRoutes = require("./routes/feed");
+
+require("dotenv").config();
 
 const app = express();
 
@@ -19,4 +22,11 @@ app.use((req, res, next) => {
 
 app.use("/feed", feedRoutes);
 
-app.listen(8080);
+mongoose
+  .connect(
+    `mongodb+srv://admin-samudra:${process.env.MONGODB_PASS}@cluster0.cd33k.mongodb.net/messages?retryWrites=true&w=majority`
+  )
+  .then((result) => {
+    app.listen(8080);
+  })
+  .catch((err) => console.log(err));
